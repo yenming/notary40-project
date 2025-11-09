@@ -1,0 +1,51 @@
+$timeline-background: rgba(255, 255, 255, 0.05);
+$timeline-border: rgba(255, 255, 255, 0.2);
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 0;
+  list-style: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    width: 2px;
+    height: 100%;
+    background: $timeline-border;
+  }
+
+  &__item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background: $timeline-background;
+    backdrop-filter: blur(6px);
+    border: 1px solid $timeline-border;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 1.5rem;
+      left: -1.1rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0d6efd;
+      box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+    }
+
+    h5 {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+}
+

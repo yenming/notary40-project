@@ -1,0 +1,21 @@
+<div class="mb-4">
+  <a class="btn btn-link text-decoration-none text-light" href="/admin/users">
+    <i class="fa-solid fa-arrow-left me-2"></i>
+    Back to Users
+  </a>
+</div>
+
+<div class="card bg-dark border border-secondary">
+  <div class="card-body">
+    <h2 class="h4 mb-3"><%= user.name %></h2>
+    <dl class="row">
+      <dt class="col-sm-3 text-muted">Email</dt>
+      <dd class="col-sm-9"><%= user.email %></dd>
+      <dt class="col-sm-3 text-muted">Joined</dt>
+      <dd class="col-sm-9"><%= new Date(user.createdAt).toLocaleString() %></dd>
+      <dt class="col-sm-3 text-muted">Last Updated</dt>
+      <dd class="col-sm-9"><%= new Date(user.updatedAt).toLocaleString() %></dd>
+    </dl>
+  </div>
+</div>
+

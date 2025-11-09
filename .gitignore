@@ -1,0 +1,26 @@
+# Logs
+/logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables
+.env
+
+# Node modules
+/node_modules
+
+# Build artifacts
+/coverage
+/dist
+
+# Sequelize generated files
+/sequelize.sqlite
+
+# Docker
+/.docker
+
+# Mac
+.DS_Store
+

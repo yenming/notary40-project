@@ -1,0 +1,15 @@
+env_variables:
+  NODE_ENV: "production"
+  PORT: "8080"
+  DB_CONNECT_RETRIES: "15"
+  DB_CONNECT_RETRY_DELAY: "2000"
+  DB_HOST: "db"
+  DB_PORT: "3306"
+  DB_NAME: "store_radar"
+  DB_USER: "store_radar_app"
+  DB_PASSWORD: "store_radar_pass"
+  DB_ROOT_PASSWORD: "root_super_secret"
+  JWT_SECRET: "replace_me"
+  JWT_EXPIRES_IN: "1d"
+  BCRYPT_SALT_ROUNDS: "10"
+
