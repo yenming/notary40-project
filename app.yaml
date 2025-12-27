@@ -1,6 +1,6 @@
 runtime: nodejs20
 env: standard
-service: store-radar
+service: notary40
 instance_class: F1
 includes:
   - env_variables.yaml

@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    container_name: store-radar-app
+    container_name: notary40-app
     restart: unless-stopped
     ports:
       - "${PORT:-3000}:3000"
@@ -10,9 +10,9 @@ services:
       PORT: "${PORT:-3000}"
       DB_HOST: "${DB_HOST:-db}"
       DB_PORT: "${DB_PORT:-3306}"
-      DB_NAME: "${DB_NAME:-store_radar}"
-      DB_USER: "${DB_USER:-store_radar_app}"
-      DB_PASSWORD: "${DB_PASSWORD:-store_radar_pass}"
+      DB_NAME: "${DB_NAME:-notary40}"
+      DB_USER: "${DB_USER:-notary40_app}"
+      DB_PASSWORD: "${DB_PASSWORD:-notary40_pass}"
       DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root_super_secret}"
       JWT_SECRET: "${JWT_SECRET:-changeme}"
       JWT_EXPIRES_IN: "${JWT_EXPIRES_IN:-1d}"
@@ -26,13 +26,13 @@ services:
 
   db:
     image: mysql:8.4
-    container_name: store-radar-db
+    container_name: notary40-db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root_super_secret}"
-      MYSQL_DATABASE: "${DB_NAME:-store_radar}"
-      MYSQL_USER: "${DB_USER:-store_radar_app}"
-      MYSQL_PASSWORD: "${DB_PASSWORD:-store_radar_pass}"
+      MYSQL_DATABASE: "${DB_NAME:-notary40}"
+      MYSQL_USER: "${DB_USER:-notary40_app}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-notary40_pass}"
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s

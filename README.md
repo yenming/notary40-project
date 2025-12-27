@@ -79,7 +79,7 @@ docker-compose up --build
 ## 資料夾結構
 
 ```
-store-radar/
+notary40/
 ├── app.js
 ├── server.js
 ├── app.yaml
