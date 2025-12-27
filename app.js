@@ -9,6 +9,16 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const routes = require("./routes");
+const aboutRoutes = require("./routes/about");
+const blogRoutes = require("./routes/blog");
+const departmentRoutes = require("./routes/department");
+const docRoutes = require("./routes/doc");
+const payRoutes = require("./routes/pay");
+const contactRoutes = require("./routes/contact");
+const linkRoutes = require("./routes/link");
+
+
+
 const { currentUser } = require("./middleware/auth");
 
 const app = express();
@@ -26,8 +36,18 @@ app.use(currentUser);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", routes);
+app.use("/about", aboutRoutes);
+app.use("/blog", blogRoutes);
+app.use("/department", departmentRoutes);
+app.use("/doc", docRoutes);
+app.use("/pay", payRoutes);
+app.use("/contact", contactRoutes);
+app.use("/link", linkRoutes);
 
-app.use((req, res) => {
+
+
+
+app.use((req, res, next) => {
   res.status(404);
   if (req.accepts("html")) {
     return res.render("error/404", { title: "Page Not Found" });

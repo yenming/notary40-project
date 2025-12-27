@@ -1,0 +1,17 @@
+{
+  "name": "士林區 民間公證人 張加慶 事務所",
+  "short_name": "張加慶公證人",
+  "description": "臺灣士林地方法院所屬 民間公證人 張加慶 事務所 - 房屋借用契約公證、房屋租賃契約公證、授權書/委託書認證等服務",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "assets/img/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
+

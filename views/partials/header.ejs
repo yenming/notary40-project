@@ -1,72 +1,58 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-      <i class="fa-solid fa-store"></i>
-      Init Project
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin">Admin</a>
-        </li>
-        <% if (user) { %>
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="fa-solid fa-user"></i>
-            <span class="ms-1"><%= user.name %></span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" href="/auth/profile">
-                <i class="fa-solid fa-id-card-clip me-2"></i>
-                Profile
-              </a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <form method="POST" action="/auth/logout" class="px-3 py-1">
-                <button class="btn btn-link dropdown-item text-danger px-0" type="submit">
-                  <i class="fa-solid fa-right-from-bracket me-2"></i>
-                  Logout
-                </button>
-              </form>
-            </li>
-          </ul>
-        </li>
-        <% } else { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/auth/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-primary" href="/auth/register">
-            <i class="fa-solid fa-user-plus me-1"></i>
-            Sign Up
-          </a>
-        </li>
-        <% } %>
-      </ul>
-    </div>
-  </div>
-</nav>
-
+<header>
+  <!--? Header Start -->
+  <div class="header-area">
+      <div class="main-header header-sticky">
+          <div class="container-fluid">
+              <div class="row align-items-center">
+                  <!-- Logo -->
+                  <div class="col-xl-2 col-lg-2 col-md-1">
+                      <div class="logo">
+                          <a href="/" style="display: flex; align-items: center;">
+                              <img src="assets/img/logo/logo.png" alt="" style="margin-right: 10px;">
+                              <hr style="background-color: white; height: 2px; width: 100%;">
+                              <img src="assets/img/logo/title.jpg" alt="" style="margin-left: 10px;width: 180px;">
+                          </a>
+                      </div>
+                      
+                  </div>
+                  <div class="col-xl-10 col-lg-10 col-md-10">
+                      <div class="menu-main d-flex align-items-center justify-content-end">
+                          <!-- Main-menu -->
+                          <div class="main-menu f-right d-none d-lg-block">
+                              <nav>
+                                  <ul id="navigation">
+                                      <li><a href="/">首頁</a></li>
+                                      <li><a href="/blog">最新消息</a></li>
+                                      <li><a href="/about">關於公證人</a></li>
+                                      <li><a href="/department">業務介紹</a>
+                                          <ul class="submenu">
+                                              <li><a href="/blog_details">房屋借用契約 公證</a></li>
+                                              <li><a href="/blog_details_2">房屋租賃契約 公證</a></li>
+                                              <li><a href="/blog_details_3">授權書/委託書 認證</a></li>
+                                              <li><a href="/blog_details_4">終止房屋租賃契約 公證</a></li>
+                                              <li><a href="/blog_details_5">單身證明（單身切結書）認證</a></li>
+                                              <li><a href="/blog_details_6">自書遺囑 認證</a></li>
+                                              <li><a href="/blog_details_7">信託契約 公證</a></li>
+                                              <li><a href="/blog_details_8">職務宿舍借用契約 公證</a></li>
+                                              <li><a href="/blog_details_9">離婚協議書 公證</a></li>
+                                              <li><a href="/blog_details_10">贈與契約 公證</a></li>
+                                          </ul></li>
+                                          <li><a href="/doc">相關文件</a></li>
+                                          <li><a href="/pay">收費標準</a></li>
+                                          <li><a href="/contact">聯絡我們</a></li>
+                                          <li><a href="/link">相關連結</a></li>
+                                      </ul>
+                                  </nav>
+                              </div>
+                          </div>
+                      </div>   
+                      <!-- Mobile Menu -->
+                      <div class="col-12">
+                          <div class="mobile_menu d-block d-lg-none"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Header End -->
+  </header>

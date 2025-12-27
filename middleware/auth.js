@@ -44,6 +44,8 @@ async function currentUser(req, res, next) {
     const token = extractToken(req);
     if (!token) {
       res.locals.user = null;
+      // Set current URL for SEO
+      res.locals.currentUrl = process.env.BASE_URL || `https://yourdomain.com${req.originalUrl || '/'}`;
       return next();
     }
 
@@ -52,9 +54,13 @@ async function currentUser(req, res, next) {
 
     req.user = user;
     res.locals.user = user;
+    // Set current URL for SEO
+    res.locals.currentUrl = process.env.BASE_URL || `https://yourdomain.com${req.originalUrl || '/'}`;
     return next();
   } catch (error) {
     res.locals.user = null;
+    // Set current URL for SEO
+    res.locals.currentUrl = process.env.BASE_URL || `https://yourdomain.com${req.originalUrl || '/'}`;
     return next();
   }
 }
