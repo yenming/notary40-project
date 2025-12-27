@@ -4714,6 +4714,13 @@ hr {
 .blog_right_sidebar .post_category_widget .cat-list li + li {
   padding-top: 15px;
 }
+.blog_right_sidebar .popular_post_widget .post_item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
 .blog_right_sidebar .popular_post_widget .post_item .media-body {
   justify-content: center;
   align-self: center;

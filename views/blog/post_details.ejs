@@ -1,0 +1,131 @@
+<main>
+    <!--? Hero Start -->
+    <div class="slider-area2">
+       <div class="slider-height2 d-flex align-items-center">
+             <div class="container">
+                <div class="row">
+                   <div class="col-xl-12">
+                         <div class="hero-cap hero-cap2 text-center">
+                            <h2><%= post.title %></h2>
+                         </div>
+                   </div>
+                </div>
+             </div>
+       </div>
+    </div>
+    <!-- Hero End -->
+    <!--================Blog Area =================-->
+    <section class="blog_area single-post-area section-padding">
+       <div class="container">
+          <div class="row">
+             <div class="col-lg-12">
+                <div class="single-post">
+                   <% if (post.featuredImage) { %>
+                   <div class="feature-img">
+                      <img class="img-fluid" src="<%= post.featuredImage.startsWith('http') ? post.featuredImage : '/' + post.featuredImage %>" alt="<%= post.title %>">
+                   </div>
+                   <% } %>
+                   <div class="blog_details">
+                      <% 
+                      // 處理內容，將純文字內容轉換為 HTML 格式
+                      let content = post.content || '';
+                      let htmlContent = '';
+                      let lines = content.split('\n');
+                      let currentParagraph = '';
+                      let listItems = [];
+                      let inQuote = false;
+                      let quoteContent = '';
+                      
+                      function flushParagraph() {
+                        if (currentParagraph.trim()) {
+                          htmlContent += `<p class="excert">${currentParagraph.trim()}</p>\n`;
+                          currentParagraph = '';
+                        }
+                      }
+                      
+                      function flushList() {
+                        if (listItems.length > 0) {
+                          htmlContent += '<ol class="ordered-list">\n';
+                          listItems.forEach(item => {
+                            htmlContent += `<li>${item}</li>\n`;
+                          });
+                          htmlContent += '</ol>\n';
+                          listItems = [];
+                        }
+                      }
+                      
+                      function flushQuote() {
+                        if (quoteContent.trim()) {
+                          htmlContent += `<div class="quote-wrapper">\n${quoteContent.trim()}\n</div>\n`;
+                          quoteContent = '';
+                          inQuote = false;
+                        }
+                      }
+                      
+                      lines.forEach((line, index) => {
+                        line = line.trim();
+                        
+                        // 空行處理
+                        if (!line) {
+                          flushParagraph();
+                          flushList();
+                          if (inQuote) {
+                            flushQuote();
+                          }
+                          return;
+                        }
+                        
+                        // 檢查是否為標題（以中文冒號結尾）
+                        if (line.match(/^[^：：]+[：：]$/)) {
+                          flushParagraph();
+                          flushList();
+                          flushQuote();
+                          htmlContent += `<h2>${line}</h2>\n`;
+                        }
+                        // 檢查是否為 quote-wrapper 內容（以＊開頭）
+                        else if (line.match(/^＊/)) {
+                          flushParagraph();
+                          flushList();
+                          if (!inQuote) {
+                            inQuote = true;
+                          }
+                          quoteContent += line.replace(/^＊\s*/, '') + '\n';
+                        }
+                        // 檢查是否為有序列表項（以數字開頭）
+                        else if (line.match(/^\d+\./)) {
+                          flushParagraph();
+                          flushQuote();
+                          // 移除開頭的數字和點
+                          let listContent = line.replace(/^\d+\.\s*/, '');
+                          listItems.push(listContent);
+                        }
+                        // 一般段落內容
+                        else {
+                          flushList();
+                          if (inQuote) {
+                            quoteContent += line + '\n';
+                          } else {
+                            if (currentParagraph) {
+                              currentParagraph += ' ' + line;
+                            } else {
+                              currentParagraph = line;
+                            }
+                          }
+                        }
+                      });
+                      
+                      // 處理最後剩餘的內容
+                      flushParagraph();
+                      flushList();
+                      flushQuote();
+                      %>
+                      <%- htmlContent %>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </section>
+    <!--================ Blog Area end =================-->
+</main>
+

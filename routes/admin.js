@@ -5,6 +5,7 @@ const AdminController = require("../controllers/admin/admin");
 const { authenticate } = require("../middleware/auth");
 const userRoutes = require("./admin/users");
 const announcementRoutes = require("./admin/announcements");
+const postRoutes = require("./admin/posts");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use(authenticate);
 router.get("/dashboard", AdminController.dashboard);
 router.use("/users", userRoutes);
 router.use("/announcements", announcementRoutes);
+router.use("/posts", postRoutes);
 
 module.exports = router;
 

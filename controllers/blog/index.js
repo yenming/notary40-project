@@ -1,12 +1,135 @@
 "use strict";
 
+const { Post } = require("../../models");
+const { Op } = require("sequelize");
+
 module.exports = {
-  indexPage(req, res) {
-    res.render("blog/index", {
-      title: "最新消息",
-      description: "士林區民間公證人張加慶事務所最新消息與公告，包含各類公證服務資訊、法規更新、常見問題等。",
-      keywords: "公證人最新消息,公證服務公告,士林區公證人資訊"
-    });
+  async indexPage(req, res, next) {
+    try {
+      const { search, category, tag } = req.query;
+      
+      // 構建查詢條件
+      const where = {
+        isPublished: true,
+      };
+      
+      if (search) {
+        where[Op.or] = [
+          { title: { [Op.like]: `%${search}%` } },
+          { content: { [Op.like]: `%${search}%` } },
+          { excerpt: { [Op.like]: `%${search}%` } },
+        ];
+      }
+      
+      if (category) {
+        where.category = category;
+      }
+      
+      if (tag) {
+        where.tags = { [Op.like]: `%${tag}%` };
+      }
+      
+      // 獲取已發布的文章，按發布時間倒序排列
+      const posts = await Post.findAll({
+        where,
+        order: [["publishedAt", "DESC"], ["createdAt", "DESC"]],
+      });
+
+      // 獲取所有分類及每分類的文章數量
+      const allPosts = await Post.findAll({
+        where: { isPublished: true },
+        attributes: ["category", "tags"],
+      });
+      
+      const categoryCounts = {};
+      allPosts.forEach((post) => {
+        if (post.category) {
+          categoryCounts[post.category] = (categoryCounts[post.category] || 0) + 1;
+        }
+      });
+      
+      // 獲取最新文章（前4篇）
+      const recentPosts = await Post.findAll({
+        where: { isPublished: true },
+        order: [["publishedAt", "DESC"], ["createdAt", "DESC"]],
+        limit: 4,
+        attributes: ["id", "title", "slug", "featuredImage", "publishedAt", "createdAt"],
+      });
+      
+      // 獲取所有標籤
+      const allTags = [];
+      allPosts.forEach((post) => {
+        if (post.tags) {
+          const tags = post.tags.split(",").map((t) => t.trim()).filter((t) => t);
+          tags.forEach((tag) => {
+            if (tag && !allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+          });
+        }
+      });
+
+      res.render("blog/index", {
+        title: "最新消息",
+        description: "士林區民間公證人張加慶事務所最新消息與公告，包含各類公證服務資訊、法規更新、常見問題等。",
+        keywords: "公證人最新消息,公證服務公告,士林區公證人資訊",
+        posts: posts || [],
+        categories: categoryCounts,
+        recentPosts: recentPosts || [],
+        tags: allTags,
+        searchQuery: search || "",
+        selectedCategory: category || "",
+        selectedTag: tag || "",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async blogDetailsPage(req, res, next) {
+    try {
+      const { slug } = req.params;
+      let post;
+
+      if (slug) {
+        // 先尝试使用 slug 查找
+        post = await Post.findOne({
+          where: {
+            slug,
+            isPublished: true,
+          },
+        });
+
+        // 如果找不到，尝试作为 ID 查找（兼容数字 ID）
+        if (!post && !isNaN(slug)) {
+          post = await Post.findOne({
+            where: {
+              id: parseInt(slug),
+              isPublished: true,
+            },
+          });
+        }
+      }
+
+      if (!post) {
+        const notFoundError = new Error("Post not found.");
+        notFoundError.status = 404;
+        throw notFoundError;
+      }
+
+      // 增加瀏覽次數
+      post.viewCount = (post.viewCount || 0) + 1;
+      await post.save();
+
+      res.render("blog/post_details", {
+        title: post.title,
+        description: post.excerpt || post.content.substring(0, 150),
+        keywords: post.tags || "公證服務,最新消息",
+        post,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
   blogDetailsPage(req, res) {
     res.render("blog/blog_details", {

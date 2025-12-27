@@ -1,0 +1,209 @@
+<!-- Back Button -->
+<div class="mb-3">
+  <a href="/admin/posts" class="btn btn-secondary">
+    <i class="fas fa-arrow-left me-1"></i>
+    返回文章列表
+  </a>
+</div>
+
+<!-- Post Form Card -->
+<div class="card card-primary card-outline">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-<%= post ? 'edit' : 'plus' %> me-1"></i>
+      <%= post ? '編輯文章' : '新增文章' %>
+    </h3>
+  </div>
+  <form method="POST" action="<%= post ? `/admin/posts/${post.id}/edit` : '/admin/posts/create' %>" enctype="multipart/form-data">
+    <div class="card-body">
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group mb-3">
+            <label for="title">文章標題 <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="請輸入文章標題"
+              required
+              value="<%= post ? post.title : (typeof formData !== 'undefined' && formData ? formData.title : '') %>"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="excerpt">文章摘要</label>
+            <textarea
+              class="form-control"
+              id="excerpt"
+              name="excerpt"
+              rows="3"
+              placeholder="請輸入文章摘要（選填，會顯示在列表頁）"
+            ><%= post ? post.excerpt : (typeof formData !== 'undefined' && formData ? formData.excerpt : '') %></textarea>
+            <small class="text-muted">簡短描述，會顯示在文章列表頁</small>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="content">文章內容 <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              id="content"
+              name="content"
+              rows="15"
+              placeholder="請輸入文章內容"
+              required
+            ><%= post ? post.content : (typeof formData !== 'undefined' && formData ? formData.content : '') %></textarea>
+            <small class="text-muted">支援多行文字，可以使用 HTML 標籤</small>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group mb-3">
+            <label for="featuredImage">特色圖片</label>
+            <input
+              type="file"
+              class="form-control"
+              id="featuredImage"
+              name="featuredImage"
+              accept="image/*"
+              onchange="previewImage(this)"
+              <%= post ? '' : '' %>
+            />
+            <small class="text-muted">支援格式：JPEG, JPG, PNG, GIF, WEBP（最大 5MB）</small>
+            
+            <!-- 圖片預覽 -->
+            <div id="imagePreview" class="mt-3" style="display: none;">
+              <img id="previewImg" src="" alt="預覽圖片" class="img-thumbnail" style="max-width: 100%; max-height: 200px; object-fit: contain;">
+            </div>
+            
+            <!-- 現有圖片顯示（編輯時） -->
+            <% if (post && post.featuredImage) { %>
+            <div class="mt-3">
+              <label class="form-label">目前圖片：</label>
+              <div>
+                <img src="<%= post.featuredImage.startsWith('http') ? post.featuredImage : '/' + post.featuredImage %>" alt="<%= post.title %>" class="img-thumbnail" style="max-width: 100%; max-height: 200px; object-fit: contain;">
+                <br>
+                <small class="text-muted">上傳新圖片將替換現有圖片，留空則保持原圖片</small>
+              </div>
+            </div>
+            <% } %>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="category">分類</label>
+            <input
+              type="text"
+              class="form-control"
+              id="category"
+              name="category"
+              placeholder="例如：公證服務、法規更新"
+              value="<%= post ? post.category : (typeof formData !== 'undefined' && formData ? formData.category : '') %>"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="tags">標籤</label>
+            <input
+              type="text"
+              class="form-control"
+              id="tags"
+              name="tags"
+              placeholder="例如：公證,契約,認證（用逗號分隔）"
+              value="<%= post ? post.tags : (typeof formData !== 'undefined' && formData ? formData.tags : '') %>"
+            />
+            <small class="text-muted">多個標籤請用逗號分隔</small>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>發布狀態</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="isPublished"
+                name="isPublished"
+                value="true"
+                <%= (post ? post.isPublished : false) ? 'checked' : '' %>
+              />
+              <label class="form-check-label" for="isPublished">
+                發布此文章
+              </label>
+            </div>
+            <small class="text-muted">勾選後文章將在前台顯示</small>
+          </div>
+
+          <div class="form-group mb-3" id="publishedAtGroup" style="<%= (post && post.isPublished) || (!post) ? 'display: block;' : 'display: none;' %>">
+            <label for="publishedAt">發布時間</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="publishedAt"
+              name="publishedAt"
+              value="<%= post && post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '' %>"
+            />
+            <small class="text-muted">留空則使用當前時間</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save me-1"></i>
+        <%= post ? '更新' : '創建' %>
+      </button>
+      <a href="/admin/posts" class="btn btn-secondary">
+        <i class="fas fa-times me-1"></i>
+        取消
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+function previewImage(input) {
+  const preview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+  
+  if (!preview || !previewImg) {
+    return;
+  }
+  
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+// 發布狀態切換時顯示/隱藏發布時間
+document.addEventListener('DOMContentLoaded', function() {
+  const isPublishedCheckbox = document.getElementById('isPublished');
+  const publishedAtGroup = document.getElementById('publishedAtGroup');
+  
+  if (isPublishedCheckbox && publishedAtGroup) {
+    isPublishedCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        publishedAtGroup.style.display = 'block';
+      } else {
+        publishedAtGroup.style.display = 'none';
+      }
+    });
+  }
+});
+</script>
+
