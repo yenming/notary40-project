@@ -1,7 +1,7 @@
 {
   "name": "notary40-project",
   "version": "0.1.0",
-  "description": "Init Project MVC application with Express, EJS, Sequelize, and Bootstrap.",
+  "description": ".",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
