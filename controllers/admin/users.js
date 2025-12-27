@@ -7,7 +7,7 @@ module.exports = {
     try {
       const users = await User.findAll();
       res.render("admin/users/index", {
-        title: "Manage Users",
+        title: "用戶管理",
         users,
         layout: "layouts/admin",
       });
@@ -26,7 +26,7 @@ module.exports = {
       }
 
       res.render("admin/users/detail", {
-        title: `User: ${user.name}`,
+        title: `用戶詳情 - ${user.name}`,
         user,
         layout: "layouts/admin",
       });

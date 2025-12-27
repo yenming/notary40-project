@@ -3,6 +3,7 @@
 const express = require("express");
 const IndexController = require("../controllers");
 const BlogController = require("../controllers/blog");
+const AuthController = require("../controllers/auth");
 const authRoutes = require("./auth");
 const adminRoutes = require("./admin");
 
@@ -11,6 +12,10 @@ const router = express.Router();
 router.get("/", IndexController.index);
 router.use("/auth", authRoutes);
 router.use("/admin", adminRoutes);
+
+// Redirect /login to /auth/login for convenience
+router.get("/login", AuthController.renderLogin);
+router.post("/login", AuthController.login);
 
 // Blog details routes (without /blog prefix)
 router.get("/blog_details", BlogController.blogDetailsPage);

@@ -1,21 +1,194 @@
-<div class="mb-4">
-  <a class="btn btn-link text-decoration-none text-light" href="/admin/users">
-    <i class="fa-solid fa-arrow-left me-2"></i>
-    Back to Users
-  </a>
-</div>
+<style>
+  .user-profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 30px;
+    color: white;
+  }
+  .user-profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: 20px;
+  }
+  .info-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  .info-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+  .info-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  .info-icon.email {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .info-icon.calendar {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+  .info-icon.clock {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+</style>
 
-<div class="card bg-dark border border-secondary">
-  <div class="card-body">
-    <h2 class="h4 mb-3"><%= user.name %></h2>
-    <dl class="row">
-      <dt class="col-sm-3 text-muted">Email</dt>
-      <dd class="col-sm-9"><%= user.email %></dd>
-      <dt class="col-sm-3 text-muted">Joined</dt>
-      <dd class="col-sm-9"><%= new Date(user.createdAt).toLocaleString() %></dd>
-      <dt class="col-sm-3 text-muted">Last Updated</dt>
-      <dd class="col-sm-9"><%= new Date(user.updatedAt).toLocaleString() %></dd>
-    </dl>
+<div class="container-fluid py-4">
+  <!-- Back Button -->
+  <div class="mb-4">
+    <a class="btn btn-outline-light" href="/admin/users">
+      <i class="fa-solid fa-arrow-left me-2"></i>
+      返回用戶列表
+    </a>
+  </div>
+
+  <!-- User Profile Header -->
+  <div class="user-profile-header">
+    <div class="text-center">
+      <div class="user-profile-avatar mx-auto">
+        <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+      </div>
+      <h1 class="h2 mb-2"><%= user.name || '未命名用戶' %></h1>
+      <p class="mb-0 opacity-75">
+        <i class="fa-solid fa-id-card me-2"></i>
+        用戶 ID: <%= user.id %>
+      </p>
+    </div>
+  </div>
+
+  <!-- User Information Cards -->
+  <div class="row g-4">
+    <!-- Email Card -->
+    <div class="col-md-4">
+      <div class="info-card">
+        <div class="info-icon email mx-auto">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">電子郵件</h6>
+        <h5 class="mb-0">
+          <a href="mailto:<%= user.email %>" class="text-decoration-none text-light">
+            <%= user.email %>
+          </a>
+        </h5>
+      </div>
+    </div>
+
+    <!-- Joined Date Card -->
+    <div class="col-md-4">
+      <div class="info-card">
+        <div class="info-icon calendar mx-auto">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">註冊時間</h6>
+        <h5 class="mb-0 text-light">
+          <%= new Date(user.createdAt).toLocaleDateString('zh-TW', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          }) %>
+        </h5>
+        <p class="text-muted mb-0 mt-2" style="font-size: 0.85rem;">
+          <%= new Date(user.createdAt).toLocaleTimeString('zh-TW', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          }) %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Last Updated Card -->
+    <div class="col-md-4">
+      <div class="info-card">
+        <div class="info-icon clock mx-auto">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">最後更新</h6>
+        <h5 class="mb-0 text-light">
+          <%= new Date(user.updatedAt).toLocaleDateString('zh-TW', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          }) %>
+        </h5>
+        <p class="text-muted mb-0 mt-2" style="font-size: 0.85rem;">
+          <%= new Date(user.updatedAt).toLocaleTimeString('zh-TW', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          }) %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Information -->
+  <div class="card bg-dark border-0 shadow-lg mt-4">
+    <div class="card-header bg-transparent border-bottom border-secondary py-3">
+      <h5 class="mb-0">
+        <i class="fa-solid fa-info-circle me-2"></i>
+        詳細資訊
+      </h5>
+    </div>
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3 text-muted mb-3">
+          <i class="fa-solid fa-envelope me-2"></i>
+          電子郵件
+        </dt>
+        <dd class="col-sm-9 mb-3">
+          <a href="mailto:<%= user.email %>" class="text-decoration-none text-light">
+            <%= user.email %>
+          </a>
+        </dd>
+        
+        <dt class="col-sm-3 text-muted mb-3">
+          <i class="fa-solid fa-calendar-plus me-2"></i>
+          註冊時間
+        </dt>
+        <dd class="col-sm-9 mb-3 text-light">
+          <%= new Date(user.createdAt).toLocaleString('zh-TW', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          }) %>
+        </dd>
+        
+        <dt class="col-sm-3 text-muted mb-0">
+          <i class="fa-solid fa-clock-rotate-left me-2"></i>
+          最後更新
+        </dt>
+        <dd class="col-sm-9 mb-0 text-light">
+          <%= new Date(user.updatedAt).toLocaleString('zh-TW', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          }) %>
+        </dd>
+      </dl>
+    </div>
   </div>
 </div>
 

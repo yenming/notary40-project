@@ -1,41 +1,177 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="h3">Users</h1>
-  <a class="btn btn-outline-light disabled" tabindex="-1" aria-disabled="true">
-    <i class="fa-solid fa-user-plus me-2"></i>
-    Add User (soon)
-  </a>
-</div>
+<style>
+  .user-card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
+  .user-info h5 {
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .user-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #adb5bd;
+  }
+  .user-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+  .stats-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+  }
+  .table-responsive {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table thead th {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  .table tbody tr {
+    transition: all 0.2s ease;
+  }
+  .table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+</style>
 
-<div class="card bg-dark border border-secondary">
-  <div class="card-body p-0">
-    <table class="table table-dark table-striped mb-0">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Joined</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (users && users.length) { %>
-        <% users.forEach((user) => { %>
-        <tr>
-          <th scope="row"><%= user.id %></th>
-          <td>
-            <a class="link-light" href="/admin/users/<%= user.id %>"><%= user.name %></a>
-          </td>
-          <td><%= user.email %></td>
-          <td><%= new Date(user.createdAt).toLocaleString() %></td>
-        </tr>
-        <% }); %>
-        <% } else { %>
-        <tr>
-          <td colspan="4" class="text-center text-muted py-4">No users found.</td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-1">
+        <i class="fa-solid fa-users me-2 text-primary"></i>
+        用戶管理
+      </h1>
+      <p class="text-muted mb-0">管理系統中的所有用戶帳號</p>
+    </div>
+    <a class="btn btn-primary disabled" tabindex="-1" aria-disabled="true">
+      <i class="fa-solid fa-user-plus me-2"></i>
+      新增用戶（即將推出）
+    </a>
+  </div>
+
+  <!-- Stats Card -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="stats-card">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="text-uppercase mb-2" style="opacity: 0.9; font-size: 0.85rem;">總用戶數</h6>
+            <h2 class="mb-0"><%= users ? users.length : 0 %></h2>
+          </div>
+          <i class="fa-solid fa-users fa-2x" style="opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card bg-dark border-0 shadow-lg">
+    <div class="card-header bg-transparent border-bottom border-secondary py-3">
+      <h5 class="mb-0">
+        <i class="fa-solid fa-list me-2"></i>
+        用戶列表
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 80px;">#</th>
+              <th scope="col">用戶資訊</th>
+              <th scope="col">電子郵件</th>
+              <th scope="col">註冊時間</th>
+              <th scope="col" style="width: 100px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (users && users.length) { %>
+            <% users.forEach((user) => { %>
+            <tr>
+              <th scope="row" class="align-middle">
+                <div class="user-avatar mx-auto">
+                  <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+                </div>
+              </th>
+              <td class="align-middle">
+                <div class="user-info">
+                  <h5 class="mb-1">
+                    <a href="/admin/users/<%= user.id %>" class="text-decoration-none text-light">
+                      <%= user.name || '未命名用戶' %>
+                    </a>
+                  </h5>
+                  <p class="user-meta mb-0">
+                    <i class="fa-solid fa-id-card me-1"></i>
+                    ID: <%= user.id %>
+                  </p>
+                </div>
+              </td>
+              <td class="align-middle">
+                <a href="mailto:<%= user.email %>" class="text-decoration-none text-light">
+                  <i class="fa-solid fa-envelope me-2"></i>
+                  <%= user.email %>
+                </a>
+              </td>
+              <td class="align-middle">
+                <span class="user-meta">
+                  <i class="fa-solid fa-calendar me-2"></i>
+                  <%= new Date(user.createdAt).toLocaleDateString('zh-TW', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }) %>
+                </span>
+              </td>
+              <td class="align-middle">
+                <a href="/admin/users/<%= user.id %>" class="btn btn-sm btn-outline-primary">
+                  <i class="fa-solid fa-eye me-1"></i>
+                  查看
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+            <% } else { %>
+            <tr>
+              <td colspan="5" class="text-center py-5">
+                <div class="py-4">
+                  <i class="fa-solid fa-users-slash fa-3x text-muted mb-3 d-block"></i>
+                  <p class="text-muted mb-0">目前沒有任何用戶</p>
+                </div>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
