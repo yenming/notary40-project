@@ -1,43 +1,151 @@
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center gap-3 mb-4">
-          <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-            <i class="fa-solid fa-user fa-lg"></i>
-          </div>
-          <div>
-            <h2 class="h4 mb-0"><%= user?.name %></h2>
-            <span class="text-muted"><%= user?.email %></span>
-          </div>
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="border rounded p-3 h-100">
-              <h5 class="text-muted text-uppercase fs-6">Member Since</h5>
-              <p class="mb-0"><%= user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A" %></p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="border rounded p-3 h-100">
-              <h5 class="text-muted text-uppercase fs-6">Status</h5>
-              <p class="mb-0">
-                <span class="badge bg-success">Active</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 d-flex gap-2">
-          <a class="btn btn-outline-primary" href="/">Back to Dashboard</a>
-          <form method="POST" action="/auth/logout">
-            <button class="btn btn-outline-danger" type="submit">
-              <i class="fa-solid fa-right-from-bracket me-2"></i>
-              Logout
-            </button>
-          </form>
+<!-- User Profile Card -->
+<div class="card card-primary card-outline">
+  <div class="card-body box-profile">
+    <div class="text-center">
+      <div class="img-circle elevation-2 bg-primary d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+        <span class="text-white fw-bold" style="font-size: 48px;"><%= user?.name ? user.name.charAt(0).toUpperCase() : 'U' %></span>
+      </div>
+      <h3 class="profile-username text-center mt-3"><%= user?.name || '未命名用戶' %></h3>
+      <p class="text-muted text-center"><%= user?.email %></p>
+    </div>
+  </div>
+</div>
+
+<!-- User Information Cards -->
+<div class="row">
+  <div class="col-md-4">
+    <div class="card card-info card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-calendar-check fa-3x text-info mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">註冊時間</h6>
+          <h5 class="mb-0">
+            <%= user?.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-TW', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }) : "N/A" %>
+          </h5>
+          <small class="text-muted">
+            <%= user?.createdAt ? new Date(user.createdAt).toLocaleTimeString('zh-TW', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            }) : "" %>
+          </small>
         </div>
       </div>
     </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card card-success card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">帳號狀態</h6>
+          <h5 class="mb-0">
+            <span class="badge bg-success">啟用中</span>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card card-warning card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">最後更新</h6>
+          <h5 class="mb-0">
+            <%= user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString('zh-TW', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }) : "N/A" %>
+          </h5>
+          <small class="text-muted">
+            <%= user?.updatedAt ? new Date(user.updatedAt).toLocaleTimeString('zh-TW', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            }) : "" %>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Information Card -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-info-circle me-1"></i>
+      詳細資訊
+    </h3>
+  </div>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">
+        <i class="fas fa-user me-2"></i>
+        姓名
+      </dt>
+      <dd class="col-sm-9"><%= user?.name || '未命名用戶' %></dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-envelope me-2"></i>
+        電子郵件
+      </dt>
+      <dd class="col-sm-9">
+        <a href="mailto:<%= user?.email %>"><%= user?.email %></a>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-calendar-plus me-2"></i>
+        註冊時間
+      </dt>
+      <dd class="col-sm-9">
+        <%= user?.createdAt ? new Date(user.createdAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) : "N/A" %>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-clock-rotate-left me-2"></i>
+        最後更新
+      </dt>
+      <dd class="col-sm-9">
+        <%= user?.updatedAt ? new Date(user.updatedAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) : "N/A" %>
+      </dd>
+    </dl>
+  </div>
+  <div class="card-footer">
+    <a href="/admin" class="btn btn-primary">
+      <i class="fas fa-tachometer-alt me-2"></i>
+      返回管理後台
+    </a>
+    <a href="/" class="btn btn-secondary">
+      <i class="fas fa-home me-2"></i>
+      返回前台
+    </a>
+    <form method="POST" action="/auth/logout" class="d-inline">
+      <button type="submit" class="btn btn-danger float-end">
+        <i class="fas fa-sign-out-alt me-2"></i>
+        登出
+      </button>
+    </form>
   </div>
 </div>
 

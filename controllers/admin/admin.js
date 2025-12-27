@@ -17,7 +17,8 @@ module.exports = {
       };
 
       res.render("admin/dashboard", {
-        title: "Admin Dashboard",
+        title: "儀表板",
+        currentPage: "dashboard",
         user: req.user,
         stats,
         layout: "layouts/admin",

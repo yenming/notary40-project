@@ -1,194 +1,147 @@
-<style>
-  .user-profile-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 15px;
-    padding: 40px;
-    margin-bottom: 30px;
-    color: white;
-  }
-  .user-profile-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    font-weight: bold;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    margin-bottom: 20px;
-  }
-  .info-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-  }
-  .info-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
-  }
-  .info-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-  .info-icon.email {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  }
-  .info-icon.calendar {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  }
-  .info-icon.clock {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  }
-</style>
+<!-- Back Button -->
+<div class="mb-3">
+  <a href="/admin/users" class="btn btn-secondary">
+    <i class="fas fa-arrow-left me-1"></i>
+    返回用戶列表
+  </a>
+  <a href="/admin/users/<%= user.id %>/edit" class="btn btn-warning">
+    <i class="fas fa-edit me-1"></i>
+    編輯用戶
+  </a>
+  <form method="POST" action="/admin/users/<%= user.id %>/delete" class="d-inline" onsubmit="return confirm('確定要刪除此用戶嗎？此操作無法復原。');">
+    <button type="submit" class="btn btn-danger">
+      <i class="fas fa-trash me-1"></i>
+      刪除用戶
+    </button>
+  </form>
+</div>
 
-<div class="container-fluid py-4">
-  <!-- Back Button -->
-  <div class="mb-4">
-    <a class="btn btn-outline-light" href="/admin/users">
-      <i class="fa-solid fa-arrow-left me-2"></i>
-      返回用戶列表
-    </a>
-  </div>
-
-  <!-- User Profile Header -->
-  <div class="user-profile-header">
+<!-- User Profile Card -->
+<div class="card card-primary card-outline">
+  <div class="card-body box-profile">
     <div class="text-center">
-      <div class="user-profile-avatar mx-auto">
-        <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+      <div class="img-circle elevation-2 bg-primary d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+        <span class="text-white fw-bold" style="font-size: 48px;"><%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %></span>
       </div>
-      <h1 class="h2 mb-2"><%= user.name || '未命名用戶' %></h1>
-      <p class="mb-0 opacity-75">
-        <i class="fa-solid fa-id-card me-2"></i>
-        用戶 ID: <%= user.id %>
-      </p>
+      <h3 class="profile-username text-center mt-3"><%= user.name || '未命名用戶' %></h3>
+      <p class="text-muted text-center">用戶 ID: <%= user.id %></p>
     </div>
   </div>
+</div>
 
-  <!-- User Information Cards -->
-  <div class="row g-4">
-    <!-- Email Card -->
-    <div class="col-md-4">
-      <div class="info-card">
-        <div class="info-icon email mx-auto">
-          <i class="fa-solid fa-envelope"></i>
+<!-- User Information Cards -->
+<div class="row">
+  <div class="col-md-4">
+    <div class="card card-primary card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">電子郵件</h6>
+          <h5 class="mb-0">
+            <a href="mailto:<%= user.email %>"><%= user.email %></a>
+          </h5>
         </div>
-        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">電子郵件</h6>
-        <h5 class="mb-0">
-          <a href="mailto:<%= user.email %>" class="text-decoration-none text-light">
-            <%= user.email %>
-          </a>
-        </h5>
-      </div>
-    </div>
-
-    <!-- Joined Date Card -->
-    <div class="col-md-4">
-      <div class="info-card">
-        <div class="info-icon calendar mx-auto">
-          <i class="fa-solid fa-calendar-check"></i>
-        </div>
-        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">註冊時間</h6>
-        <h5 class="mb-0 text-light">
-          <%= new Date(user.createdAt).toLocaleDateString('zh-TW', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          }) %>
-        </h5>
-        <p class="text-muted mb-0 mt-2" style="font-size: 0.85rem;">
-          <%= new Date(user.createdAt).toLocaleTimeString('zh-TW', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-          }) %>
-        </p>
-      </div>
-    </div>
-
-    <!-- Last Updated Card -->
-    <div class="col-md-4">
-      <div class="info-card">
-        <div class="info-icon clock mx-auto">
-          <i class="fa-solid fa-clock"></i>
-        </div>
-        <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">最後更新</h6>
-        <h5 class="mb-0 text-light">
-          <%= new Date(user.updatedAt).toLocaleDateString('zh-TW', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          }) %>
-        </h5>
-        <p class="text-muted mb-0 mt-2" style="font-size: 0.85rem;">
-          <%= new Date(user.updatedAt).toLocaleTimeString('zh-TW', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-          }) %>
-        </p>
       </div>
     </div>
   </div>
+  
+  <div class="col-md-4">
+    <div class="card card-success card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">註冊時間</h6>
+          <h5 class="mb-0">
+            <%= new Date(user.createdAt).toLocaleDateString('zh-TW', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }) %>
+          </h5>
+          <small class="text-muted">
+            <%= new Date(user.createdAt).toLocaleTimeString('zh-TW', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            }) %>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card card-info card-outline">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="fas fa-clock fa-3x text-info mb-3"></i>
+          <h6 class="text-uppercase text-muted mb-2">最後更新</h6>
+          <h5 class="mb-0">
+            <%= new Date(user.updatedAt).toLocaleDateString('zh-TW', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }) %>
+          </h5>
+          <small class="text-muted">
+            <%= new Date(user.updatedAt).toLocaleTimeString('zh-TW', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            }) %>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <!-- Additional Information -->
-  <div class="card bg-dark border-0 shadow-lg mt-4">
-    <div class="card-header bg-transparent border-bottom border-secondary py-3">
-      <h5 class="mb-0">
-        <i class="fa-solid fa-info-circle me-2"></i>
-        詳細資訊
-      </h5>
-    </div>
-    <div class="card-body">
-      <dl class="row mb-0">
-        <dt class="col-sm-3 text-muted mb-3">
-          <i class="fa-solid fa-envelope me-2"></i>
-          電子郵件
-        </dt>
-        <dd class="col-sm-9 mb-3">
-          <a href="mailto:<%= user.email %>" class="text-decoration-none text-light">
-            <%= user.email %>
-          </a>
-        </dd>
-        
-        <dt class="col-sm-3 text-muted mb-3">
-          <i class="fa-solid fa-calendar-plus me-2"></i>
-          註冊時間
-        </dt>
-        <dd class="col-sm-9 mb-3 text-light">
-          <%= new Date(user.createdAt).toLocaleString('zh-TW', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }) %>
-        </dd>
-        
-        <dt class="col-sm-3 text-muted mb-0">
-          <i class="fa-solid fa-clock-rotate-left me-2"></i>
-          最後更新
-        </dt>
-        <dd class="col-sm-9 mb-0 text-light">
-          <%= new Date(user.updatedAt).toLocaleString('zh-TW', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }) %>
-        </dd>
-      </dl>
-    </div>
+<!-- Detailed Information Card -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-info-circle me-1"></i>
+      詳細資訊
+    </h3>
+  </div>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">
+        <i class="fas fa-envelope me-2"></i>
+        電子郵件
+      </dt>
+      <dd class="col-sm-9">
+        <a href="mailto:<%= user.email %>"><%= user.email %></a>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-calendar-plus me-2"></i>
+        註冊時間
+      </dt>
+      <dd class="col-sm-9">
+        <%= new Date(user.createdAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) %>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-clock-rotate-left me-2"></i>
+        最後更新
+      </dt>
+      <dd class="col-sm-9">
+        <%= new Date(user.updatedAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) %>
+      </dd>
+    </dl>
   </div>
 </div>
 

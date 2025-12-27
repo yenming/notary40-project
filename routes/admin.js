@@ -11,7 +11,8 @@ router.get("/login", AdminController.renderLogin);
 
 router.use(authenticate);
 
-router.get("/", AdminController.dashboard);
+// router.get("/", AdminController.dashboard);
+router.get("/dashboard", AdminController.dashboard);
 router.use("/users", userRoutes);
 
 module.exports = router;

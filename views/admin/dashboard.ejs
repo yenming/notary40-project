@@ -1,22 +1,68 @@
-<div class="row g-4">
-  <div class="col-lg-3 col-md-6">
-    <div class="card bg-secondary text-light">
-      <div class="card-body">
-        <h5 class="card-title text-uppercase fs-6">Total Users</h5>
-        <p class="display-5 fw-bold"><%= typeof stats !== "undefined" ? stats.users : "--" %></p>
+<!-- Info boxes -->
+<div class="row">
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">總用戶數</span>
+        <span class="info-box-number">
+          <%= typeof stats !== "undefined" ? stats.users : "0" %>
+        </span>
       </div>
     </div>
   </div>
-  <div class="col-lg-9">
-    <div class="card bg-dark border border-secondary">
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+      <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-file-alt"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">文件數</span>
+        <span class="info-box-number">--</span>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix hidden-md-up"></div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+      <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check-circle"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">已完成</span>
+        <span class="info-box-number">--</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+      <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-clock"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">待處理</span>
+        <span class="info-box-number">--</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Welcome Card -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-home me-1"></i>
+          歡迎回來
+        </h3>
+      </div>
       <div class="card-body">
-        <h5 class="card-title">Welcome Back, <%= user?.name || "Admin" %></h5>
-        <p class="card-text text-muted">
-          Use the navigation to manage store content, user accounts, and analyze performance metrics.
+        <h5>您好，<%= user?.name || "管理員" %>！</h5>
+        <p class="text-muted">
+          歡迎使用管理後台系統。您可以透過左側選單管理用戶帳號、查看系統統計資訊等。
         </p>
-        <a class="btn btn-outline-light" href="/admin/users">
-          <i class="fa-solid fa-users me-2"></i>
-          Manage Users
+        <a href="/admin/users" class="btn btn-primary">
+          <i class="fas fa-users me-2"></i>
+          管理用戶
+        </a>
+        <a href="/" class="btn btn-secondary">
+          <i class="fas fa-external-link-alt me-2"></i>
+          返回前台
         </a>
       </div>
     </div>

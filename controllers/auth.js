@@ -78,8 +78,10 @@ module.exports = {
   async profile(req, res, next) {
     try {
       res.render("auth/profile", {
-        title: "Your Profile",
+        title: "個人資料",
+        currentPage: "profile",
         user: req.user,
+        layout: "layouts/admin",
       });
     } catch (error) {
       next(error);
