@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-TW" data-bs-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= typeof title !== 'undefined' ? title + ' - 管理後台' : '管理後台 - 士林區 民間公證人 張加慶 事務所' %></title>
   
   <!-- Google Font: Source Sans Pro -->
@@ -93,7 +93,7 @@
           <a href="/auth/profile" class="d-block"><%= typeof user !== 'undefined' && user ? user.name : '管理員' %></a>
         </div>
       </div>
-
+    
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -113,6 +113,16 @@
               <i class="nav-icon fas fa-users"></i>
               <p>
                 用戶管理
+              </p>
+            </a>
+          </li>
+          
+          <!-- Announcements -->
+          <li class="nav-item">
+            <a href="/admin/announcements" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'announcements' ? 'active' : '' %>">
+              <i class="nav-icon fas fa-bullhorn"></i>
+              <p>
+                公告欄管理
               </p>
             </a>
           </li>

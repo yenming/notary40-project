@@ -29,17 +29,68 @@
       <div class="container">
           <div class="row">
             <!-- 首頁公布欄 -->
-              <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+              <% if (typeof announcements !== 'undefined' && announcements && announcements.length > 0) { %>
+                <% announcements.forEach((announcement) => { %>
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-12 mb-4">
+                    <% if (announcement.linkUrl) { %>
+                      <a href="<%= announcement.linkUrl %>" target="_blank" style="display: block; text-decoration: none;">
+                    <% } %>
+                    
+                    <!-- 圖片模式 -->
+                    <% if (announcement.imageUrl) { %>
+                      <div class="announcement-image">
+                        <img 
+                          src="<%= announcement.imageUrl.startsWith('http') ? announcement.imageUrl : '/' + announcement.imageUrl %>" 
+                          alt="<%= announcement.title %>" 
+                          style="width: 100%; height: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+                        >
+                      </div>
+                    <% } %>
+                    
+                    <!-- 文字模式 -->
+                    <% if (!announcement.imageUrl && announcement.content) { %>
+                      <div class="card announcement-text" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="card-body" style="padding: 30px;">
+                          <% if (announcement.title) { %>
+                            <h4 class="card-title mb-3" style="color: #333; font-weight: 600;">
+                              <%= announcement.title %>
+                            </h4>
+                          <% } %>
+                          <div class="card-text" style="color: #666; line-height: 1.8; white-space: pre-line;">
+                            <%= announcement.content %>
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
+                    
+                    <!-- 只有標題的情況 -->
+                    <% if (!announcement.imageUrl && !announcement.content && announcement.title) { %>
+                      <div class="card announcement-text" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="card-body" style="padding: 30px;">
+                          <h4 class="card-title mb-0" style="color: #333; font-weight: 600;">
+                            <%= announcement.title %>
+                          </h4>
+                        </div>
+                      </div>
+                    <% } %>
+                    
+                    <% if (announcement.linkUrl) { %>
+                      </a>
+                    <% } %>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <!-- 預設顯示（當沒有公告時） -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                   <img src="assets/img/index/index3.jpg" style="width: 100%; height: 100%;">
-                  
-              </div>
-              <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                   <img src="assets/img/index/index.png" style="width: 100%; height: 100%;">
-                  
-              </div>
-              <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                   <img src="assets/img/index/index2.png" style="width: 100%; height: 100%;">
-              </div>
+                </div>
+              <% } %>
           </div>
       </div>
   </div>

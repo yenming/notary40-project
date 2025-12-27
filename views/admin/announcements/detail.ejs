@@ -1,0 +1,104 @@
+<!-- Back Button -->
+<div class="mb-3">
+  <a href="/admin/announcements" class="btn btn-secondary">
+    <i class="fas fa-arrow-left me-1"></i>
+    返回公告列表
+  </a>
+  <a href="/admin/announcements/<%= announcement.id %>/edit" class="btn btn-warning">
+    <i class="fas fa-edit me-1"></i>
+    編輯公告
+  </a>
+  <form method="POST" action="/admin/announcements/<%= announcement.id %>/delete" class="d-inline" onsubmit="return confirm('確定要刪除此公告嗎？此操作無法復原。');">
+    <button type="submit" class="btn btn-danger">
+      <i class="fas fa-trash me-1"></i>
+      刪除公告
+    </button>
+  </form>
+</div>
+
+<!-- Announcement Detail Card -->
+<div class="card card-primary card-outline">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-bullhorn me-1"></i>
+      <%= announcement.title %>
+    </h3>
+  </div>
+  <div class="card-body">
+    <% if (announcement.imageUrl) { %>
+    <div class="mb-3">
+      <img src="<%= announcement.imageUrl.startsWith('http') ? announcement.imageUrl : '/' + announcement.imageUrl %>" alt="<%= announcement.title %>" class="img-fluid" style="max-height: 400px; object-fit: contain;">
+    </div>
+    <% } %>
+
+    <% if (announcement.content) { %>
+    <div class="mb-3">
+      <h5>公告內容</h5>
+      <p class="text-muted"><%= announcement.content %></p>
+    </div>
+    <% } %>
+
+    <dl class="row">
+      <dt class="col-sm-3">
+        <i class="fas fa-link me-2"></i>
+        連結網址
+      </dt>
+      <dd class="col-sm-9">
+        <% if (announcement.linkUrl) { %>
+        <a href="<%= announcement.linkUrl %>" target="_blank"><%= announcement.linkUrl %></a>
+        <% } else { %>
+        <span class="text-muted">無</span>
+        <% } %>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-sort-numeric-up me-2"></i>
+        顯示順序
+      </dt>
+      <dd class="col-sm-9"><%= announcement.order %></dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-toggle-on me-2"></i>
+        狀態
+      </dt>
+      <dd class="col-sm-9">
+        <% if (announcement.isActive) { %>
+        <span class="badge bg-success">啟用</span>
+        <% } else { %>
+        <span class="badge bg-secondary">停用</span>
+        <% } %>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-calendar-plus me-2"></i>
+        建立時間
+      </dt>
+      <dd class="col-sm-9">
+        <%= new Date(announcement.createdAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) %>
+      </dd>
+      
+      <dt class="col-sm-3">
+        <i class="fas fa-clock-rotate-left me-2"></i>
+        最後更新
+      </dt>
+      <dd class="col-sm-9">
+        <%= new Date(announcement.updatedAt).toLocaleString('zh-TW', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) %>
+      </dd>
+    </dl>
+  </div>
+</div>
+

@@ -1,0 +1,285 @@
+<!-- Back Button -->
+<div class="mb-3">
+  <a href="/admin/announcements" class="btn btn-secondary">
+    <i class="fas fa-arrow-left me-1"></i>
+    返回公告列表
+  </a>
+</div>
+
+<!-- Announcement Form Card -->
+<div class="card card-primary card-outline">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-<%= announcement ? 'edit' : 'plus' %> me-1"></i>
+      <%= announcement ? '編輯公告' : '新增公告' %>
+    </h3>
+  </div>
+  <form method="POST" action="<%= announcement ? `/admin/announcements/${announcement.id}/edit` : '/admin/announcements/create' %>" enctype="multipart/form-data">
+    <div class="card-body">
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
+
+      <div class="form-group mb-3">
+        <label for="title">公告標題 <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="請輸入公告標題"
+          required
+          value="<%= announcement ? announcement.title : (typeof formData !== 'undefined' && formData ? formData.title : '') %>"
+        />
+      </div>
+
+      <!-- 顯示模式選擇 -->
+      <div class="form-group mb-3">
+        <label>顯示模式 <span class="text-danger">*</span></label>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="displayType"
+            id="displayTypeImage"
+            value="image"
+            <%= (announcement && announcement.imageUrl) || (!announcement && (typeof formData === 'undefined' || !formData || !formData.displayType || formData.displayType === 'image')) ? 'checked' : '' %>
+            onchange="toggleDisplayMode()"
+            onclick="toggleDisplayMode()"
+          />
+          <label class="form-check-label" for="displayTypeImage" style="cursor: pointer;">
+            <i class="fas fa-image me-1"></i>圖片模式
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="displayType"
+            id="displayTypeText"
+            value="text"
+            <%= (announcement && !announcement.imageUrl && announcement.content) || (typeof formData !== 'undefined' && formData && formData.displayType === 'text') ? 'checked' : '' %>
+            onchange="toggleDisplayMode()"
+            onclick="toggleDisplayMode()"
+          />
+          <label class="form-check-label" for="displayTypeText" style="cursor: pointer;">
+            <i class="fas fa-font me-1"></i>文字模式
+          </label>
+        </div>
+        <small class="text-muted">選擇公告的顯示方式：圖片模式會顯示上傳的圖片，文字模式會顯示文字內容</small>
+      </div>
+
+      <!-- 圖片模式 -->
+      <div id="imageMode" class="form-group mb-3" style="<%= (announcement && announcement.imageUrl) || (!announcement && (typeof formData === 'undefined' || !formData || !formData.displayType || formData.displayType === 'image')) ? 'display: block;' : 'display: none;' %>">
+        <label for="image">
+          上傳圖片 
+          <% if (!announcement) { %>
+            <span class="text-danger">*</span>
+          <% } else { %>
+            <small class="text-muted">（留空則保持原圖片）</small>
+          <% } %>
+        </label>
+        <input
+          type="file"
+          class="form-control"
+          id="image"
+          name="image"
+          accept="image/*"
+          onchange="previewImage(this)"
+          <%= (!announcement && (typeof formData === 'undefined' || !formData || !formData.displayType || formData.displayType === 'image')) ? 'required' : '' %>
+        />
+        <small class="text-muted">支援格式：JPEG, JPG, PNG, GIF, WEBP（最大 5MB）</small>
+        
+        <!-- 圖片預覽 -->
+        <div id="imagePreview" class="mt-3" style="display: none;">
+          <img id="previewImg" src="" alt="預覽圖片" class="img-thumbnail" style="max-width: 300px; max-height: 200px; object-fit: contain;">
+        </div>
+        
+        <!-- 現有圖片顯示（編輯時） -->
+        <% if (announcement && announcement.imageUrl) { %>
+        <div class="mt-3">
+          <label class="form-label">目前圖片：</label>
+          <div>
+            <img src="<%= announcement.imageUrl.startsWith('http') ? announcement.imageUrl : '/' + announcement.imageUrl %>" alt="<%= announcement.title %>" class="img-thumbnail" style="max-width: 300px; max-height: 200px; object-fit: contain;">
+            <br>
+            <small class="text-muted">上傳新圖片將替換現有圖片，留空則保持原圖片</small>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- 文字模式 -->
+      <div id="textMode" class="form-group mb-3" style="<%= (announcement && !announcement.imageUrl && announcement.content) || (typeof formData !== 'undefined' && formData && formData.displayType === 'text') ? 'display: block;' : 'display: none;' %>">
+        <label for="content">公告內容 <span class="text-danger">*</span></label>
+        <textarea
+          class="form-control"
+          id="content"
+          name="content"
+          rows="6"
+          placeholder="請輸入公告內容"
+          <%= (announcement && !announcement.imageUrl && announcement.content) || (typeof formData !== 'undefined' && formData && formData.displayType === 'text') ? 'required' : '' %>
+        ><%= announcement ? announcement.content : (typeof formData !== 'undefined' && formData ? formData.content : '') %></textarea>
+        <small class="text-muted">支援多行文字，可以使用換行來格式化內容</small>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="linkUrl">連結網址</label>
+        <input
+          type="url"
+          class="form-control"
+          id="linkUrl"
+          name="linkUrl"
+          placeholder="請輸入連結網址（選填）"
+          value="<%= announcement ? announcement.linkUrl : (typeof formData !== 'undefined' && formData ? formData.linkUrl : '') %>"
+        />
+        <small class="text-muted">點擊公告時要跳轉的網址（選填）</small>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="order">顯示順序</label>
+            <input
+              type="number"
+              class="form-control"
+              id="order"
+              name="order"
+              placeholder="0"
+              value="<%= announcement ? announcement.order : (typeof formData !== 'undefined' && formData ? formData.order : '0') %>"
+            />
+            <small class="text-muted">數字越小越前面顯示，預設為 0</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>狀態</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="isActive"
+                name="isActive"
+                value="true"
+                <%= (announcement ? announcement.isActive : true) ? 'checked' : '' %>
+              />
+              <label class="form-check-label" for="isActive">
+                啟用此公告
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save me-1"></i>
+        <%= announcement ? '更新' : '創建' %>
+      </button>
+      <a href="/admin/announcements" class="btn btn-secondary">
+        <i class="fas fa-times me-1"></i>
+        取消
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+function toggleDisplayMode() {
+  const imageMode = document.getElementById('imageMode');
+  const textMode = document.getElementById('textMode');
+  const imageRadio = document.getElementById('displayTypeImage');
+  const textRadio = document.getElementById('displayTypeText');
+  
+  if (!imageMode || !textMode || !imageRadio || !textRadio) {
+    // 如果元素还没加载，稍后再试
+    setTimeout(toggleDisplayMode, 100);
+    return;
+  }
+  
+  if (imageRadio.checked) {
+    // 圖片模式：顯示圖片上傳，隱藏文字輸入
+    imageMode.style.display = 'block';
+    textMode.style.display = 'none';
+    // 圖片模式時，檢查是否為編輯模式（有現有圖片）
+    const imageInput = document.getElementById('image');
+    const contentInput = document.getElementById('content');
+    const hasExistingImage = document.querySelector('#imageMode .mt-3 img');
+    
+    if (imageInput) {
+      // 如果是編輯模式且有現有圖片，則圖片不是必填
+      // 如果是新增模式，則圖片是必填
+      imageInput.required = !hasExistingImage;
+      imageInput.removeAttribute('disabled');
+    }
+    if (contentInput) {
+      contentInput.required = false;
+    }
+  } else if (textRadio.checked) {
+    // 文字模式：隱藏圖片上傳，顯示文字輸入
+    imageMode.style.display = 'none';
+    textMode.style.display = 'block';
+    // 文字模式時，內容為必填
+    const imageInput = document.getElementById('image');
+    const contentInput = document.getElementById('content');
+    if (imageInput) {
+      imageInput.required = false;
+    }
+    if (contentInput) {
+      contentInput.required = true;
+      contentInput.removeAttribute('disabled');
+    }
+  }
+}
+
+// 頁面載入時初始化顯示模式
+document.addEventListener('DOMContentLoaded', function() {
+  toggleDisplayMode();
+});
+
+// 也使用 window.onload 確保元素已載入
+window.onload = function() {
+  toggleDisplayMode();
+};
+
+// 為單選按鈕添加事件監聽器
+document.addEventListener('DOMContentLoaded', function() {
+  const imageRadio = document.getElementById('displayTypeImage');
+  const textRadio = document.getElementById('displayTypeText');
+  
+  if (imageRadio) {
+    imageRadio.addEventListener('change', toggleDisplayMode);
+    imageRadio.addEventListener('click', toggleDisplayMode);
+  }
+  if (textRadio) {
+    textRadio.addEventListener('change', toggleDisplayMode);
+    textRadio.addEventListener('click', toggleDisplayMode);
+  }
+});
+
+function previewImage(input) {
+  const preview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+  
+  if (!preview || !previewImg) {
+    return;
+  }
+  
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+</script>
+

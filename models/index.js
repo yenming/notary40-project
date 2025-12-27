@@ -16,6 +16,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.User = require("./user")(sequelize, Sequelize.DataTypes);
+db.Announcement = require("./announcement")(sequelize, Sequelize.DataTypes);
 
 Object.values(db)
   .filter((model) => typeof model?.associate === "function")
