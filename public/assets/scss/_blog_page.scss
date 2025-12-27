@@ -647,6 +647,29 @@
 
     p {
         margin-bottom: 30px;
+        font-size: 16px;
+        line-height: 30px;
+    }
+
+    .excert {
+        font-size: 16px;
+        line-height: 30px;
+    }
+
+    span.excert {
+        font-size: 16px;
+        line-height: 30px;
+    }
+
+    ol, ul {
+        font-size: 16px;
+        line-height: 30px;
+        
+        li {
+            font-size: 16px;
+            line-height: 30px;
+            margin-bottom: 10px;
+        }
     }
 
     a {
@@ -1190,11 +1213,28 @@
 
         p {
             margin-bottom: 20px;
-            font-size: 15px;
+            font-size: 16px;
+            line-height: 30px;
+        }
+
+        .excert {
+            font-size: 16px;
+            line-height: 30px;
         }
 
         h2 {
             // color: $title-color;
+        }
+
+        ol, ul {
+            font-size: 16px;
+            line-height: 30px;
+            
+            li {
+                font-size: 16px;
+                line-height: 30px;
+                margin-bottom: 10px;
+            }
         }
     }
 
@@ -1206,9 +1246,22 @@
         font-style: italic;
         margin-top: 25px;
         margin-bottom: 25px;
+        font-size: 16px;
+        line-height: 30px;
 
         @media(min-width: 768px) {
             padding: 30px;
+        }
+
+        ol, ul {
+            font-size: 16px;
+            line-height: 30px;
+            
+            li {
+                font-size: 16px;
+                line-height: 30px;
+                margin-bottom: 10px;
+            }
         }
     }
 
