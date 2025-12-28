@@ -1,6 +1,12 @@
+# 启用 BuildKit 构建（解决传统构建器弃用警告）
+# 在构建前设置环境变量：export DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1
+# 或者使用：DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
+
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: notary40-app
     restart: unless-stopped
     ports:

@@ -15,7 +15,10 @@
     "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "db:migrate:docker": "docker compose exec app npx sequelize-cli db:migrate",
     "db:seed:docker": "docker compose exec app npx sequelize-cli db:seed:all",
-    "db:reset:docker": "docker compose exec app sh -c \"npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all\""
+    "db:reset:docker": "docker compose exec app sh -c \"npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all\"",
+    "docker:build": "DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose build",
+    "docker:up": "DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose up -d",
+    "docker:down": "docker compose down"
   },
   "keywords": [
     "express",
