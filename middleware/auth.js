@@ -67,7 +67,7 @@ async function currentUser(req, res, next) {
 
 function handleUnauthorized(req, res) {
   if (req.accepts("html")) {
-    return res.redirect("/auth/login?error=unauthorized");
+    return res.redirect("/login?error=unauthorized");
   }
 
   return res.status(401).json({ error: "Unauthorized" });
